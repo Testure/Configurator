@@ -5,6 +5,11 @@ import mcp.MethodsReturnNonnullByDefault;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
+/**
+ * stores an Enum as a string.
+ * you must provide EnumClass::valueOf.
+ * use {@link EnumConfigValue#getReal()} to get the actual Enum.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class EnumConfigValue<T extends Enum<T>> extends SerializedConfigValue<T> {

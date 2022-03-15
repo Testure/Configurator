@@ -8,6 +8,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
+/**
+ * stores an item as a string using it's registryName.
+ * use {@link ItemConfigValue#getReal()} to get the actual item.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ItemConfigValue extends SerializedConfigValue<Item> {

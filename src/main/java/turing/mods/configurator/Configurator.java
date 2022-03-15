@@ -44,11 +44,32 @@ public class Configurator {
         }
     }
 
+    /**
+     * registers a built config
+     * @param config the config to register
+     * @return the config that was registered
+     */
     public static Config register(Config config) {
         configs.add(config);
         return config;
     }
 
+    /**
+     * registers a config builder
+     * @implNote this is just a shortcut for register(builder::build);
+     * @param builder the config builder to register
+     * @return the built config that was registered
+     */
+    public static Config register(Config.Builder builder) {
+        return register(builder::build);
+    }
+
+    /**
+     * registers a supplied config
+     * @implNote common use is register(builder::build);
+     * @param config the config to register
+     * @return the config that was registered
+     */
     public static Config register(Supplier<Config> config) {
         Config c = config.get();
         configs.add(c);

@@ -4,6 +4,11 @@ import mcp.MethodsReturnNonnullByDefault;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * a config value that stores a non-json-compatible value by converting it to a string.
+ * {@link SerializedConfigValue#get()} returns the serialized value that was stored.
+ * {@link SerializedConfigValue#getReal()} returns the deserialized value.
+ */
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public abstract class SerializedConfigValue<T> extends ConfigValue<String> {
