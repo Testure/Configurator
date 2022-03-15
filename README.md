@@ -44,3 +44,7 @@ and
 
 
 You can use **Config.Type.UNCATEGORIZED** to have config files generate directly in their defined folder.
+
+### CT
+
+Coming soon!
