@@ -3,7 +3,7 @@ Configurator is a 1.16+ Forge library mod that allows developers to define .json
 
 ## Usage
 
-# Mods
+### Mods
 
 A typical config class goes as such:
 
