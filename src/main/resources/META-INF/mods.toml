@@ -1,5 +1,5 @@
 modLoader="javafml"
-loaderVersion="[36,)"
+loaderVersion="[35,)[36,)[37,)[38,)[39,)[40,)"
 license="All rights reserved"
 [[mods]]
 modId="configurator"
@@ -13,12 +13,12 @@ Library mod for creating custom JSON based config files
 [[dependencies.configurator]]
     modId="forge"
     mandatory=true
-    versionRange="[36,)"
+    versionRange="[35,)[36,)[37,)[38,)[39,)[40,)"
     ordering="NONE"
     side="BOTH"
 [[dependencies.configurator]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.16,1.17,1.18)"
+    versionRange="[1.16,)[1.17,)[1.18,)"
     ordering="NONE"
     side="BOTH"
