@@ -75,6 +75,12 @@ public class ConfigSerializer {
         for (ConfigCategory category1 : category.getSubCategories()) readCategory(categoryJSON, category1);
     }
 
+    /**
+     * reads the raw {@link JsonObject} from a config file
+     * @param name the name of the config file
+     * @param folder the folder the config file is in
+     * @return json that was read
+     */
     @Nullable
     public static JsonObject readConfigJson(String name, File folder) {
         if (!folder.exists()) throw new NullPointerException("Attempt to read config from non-existent folder!");
@@ -100,7 +106,7 @@ public class ConfigSerializer {
         return config.type.getFolder(CONFIG_DIR.getPath() + (!config.folder.isEmpty() ? "/" + config.folder : ""));
     }
 
-    public static void writeConfigJson(JsonObject json, String name, File folder) {
+    private static void writeConfigJson(JsonObject json, String name, File folder) {
         if (!initFolder(folder)) throw new NullPointerException("Could not write config!");
 
         String fileName = folder.getPath() + "/" + name;
@@ -120,5 +126,29 @@ public class ConfigSerializer {
             return false;
         }
         return true;
+    }
+
+    /**
+     * directly writes a config file using a pre-built {@link JsonObject}
+     * @param json the json object to write
+     * @param fileName the name of the config file
+     * @param folder the name of the folder to create the config file in
+     * @param type the config's type category
+     * @return if the write operation was successful
+     */
+    public static boolean writeConfigJson(JsonObject json, String fileName, String folder, Config.Type type) {
+        String folderName = !folder.isEmpty() ? "/" + folder : "";
+        if (!initFolder(new File(type.getFolder(CONFIG_DIR.getPath() + folderName)))) throw new NullPointerException();
+
+        Path path = Paths.get(CONFIG_DIR.getPath() + folderName + "/" + fileName + ".json");
+
+        if (path.toFile().exists()) throw new IllegalStateException(String.format("Config file %s already exists!", fileName));
+        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
+            writer.write(GSON.toJson(json));
+            return true;
+        } catch (IOException e) {
+            Configurator.LOGGER.error(e);
+            return false;
+        }
     }
 }
