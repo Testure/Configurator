@@ -48,3 +48,17 @@ You can use **Config.Type.UNCATEGORIZED** to have config files generate directly
 ### CT
 
 Coming soon!
+
+## Installation
+
+1. Add the cursemaven to your build.gradle:
+    ```
+   repositories {
+        maven {
+            url "https://cursemaven.com"
+        }
+    }
+    ```
+2. Go to the page for the jar you want to use on curseforge and get the ID at the end of the link. (example: 3695530 is version 1.0)
+3. Add `implementation fg.deobf("curse.maven:configurator-594414:FileID")` (replace "FileID" with the ID you got) to your dependencies in your build.gradle.
+4. Run `refreshDependencies`
