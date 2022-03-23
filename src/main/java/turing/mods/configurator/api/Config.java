@@ -35,18 +35,30 @@ public class Config {
 
         protected Builder() {}
 
+        /**
+         * Creates a new Config builder.
+         * @return the created builder
+         */
         public static Builder builder() {
             return new Builder().withFolder(Configurator.CONTAINED != null && Boolean.TRUE.equals(Configurator.CONTAINED.get()) ? "Configurator" : "");
         }
 
+        /**
+         * Creates a new Config builder with the given folder destination.
+         * @param folder the folder to put the config in
+         * @return the created builder
+         */
         public static Builder builder(String folder) {
             return builder().withFolder(folder);
         }
 
         /**
+         * <p>
          * sets the file name of this config.
+         * </p>
          * DO NOT PUT .json OR FILE PATH IN THE NAME.
          * @param name the name of the file
+         * @return this builder
          */
         public Builder withName(String name) {
             this.name = name.replaceAll("/", "_").replaceAll(".\\.", "").replaceAll(" ", "_");
@@ -54,9 +66,12 @@ public class Config {
         }
 
         /**
+         * <p>
          * defines that this config will be in the given folder.
-         * @apiNote chaining this function will allow nested folders
+         * </p>
+         * chaining this function will allow nested folders.
          * @param folder the folder name
+         * @return this builder
          */
         public Builder withFolder(String folder) {
             folder = folder.replaceAll(".\\.", "").replaceAll(" ", "_");
@@ -67,6 +82,7 @@ public class Config {
         /**
          * defines a category for this config
          * @param type the category for this config
+         * @return this builder
          */
         public Builder ofType(Type type) {
             this.type = type;
@@ -98,6 +114,11 @@ public class Config {
          * @param defaultValue the default value that is set on file generation
          * @param <T> type of value to be stored
          * @param <C> custom config value class
+         * @throws NoSuchMethodException
+         * @throws InvocationTargetException
+         * @throws InstantiationException
+         * @throws IllegalAccessException
+         * @return the created ConfigValue
          */
         public <T, C extends ConfigValue<T>> C defineCustom(String name, Class<C> configValueClass, @Nullable T defaultValue) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
             checkCurrentEdit();
@@ -114,6 +135,11 @@ public class Config {
          * @param defaultValue the default value that is set on file generation
          * @param <T> type of value to be stored
          * @param <C> custom config value class
+         * @throws NoSuchMethodException
+         * @throws InvocationTargetException
+         * @throws InstantiationException
+         * @throws IllegalAccessException
+         * @return the created ConfigValue
          */
         public <T, C extends SerializedConfigValue<T>> C defineCustomSerialized(String name, Class<C> configValueClass, @Nullable T defaultValue) throws NoSuchMethodException, InvocationTargetException, InstantiationException, IllegalAccessException {
             checkCurrentEdit();
@@ -127,6 +153,7 @@ public class Config {
          * defines a boolean value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public BooleanConfigValue define(String name, boolean defaultValue) {
             checkCurrentEdit();
@@ -140,6 +167,7 @@ public class Config {
          * defines a string value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public StringConfigValue define(String name, String defaultValue) {
             checkCurrentEdit();
@@ -153,6 +181,7 @@ public class Config {
          * defines an int value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public IntegerConfigValue define(String name, int defaultValue) {
             checkCurrentEdit();
@@ -166,6 +195,7 @@ public class Config {
          * defines a double value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public DoubleConfigValue define(String name, double defaultValue) {
             checkCurrentEdit();
@@ -179,6 +209,7 @@ public class Config {
          * defines a long value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public LongConfigValue define(String name, long defaultValue) {
             checkCurrentEdit();
@@ -192,6 +223,7 @@ public class Config {
          * defines a short value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public ShortConfigValue define(String name, short defaultValue) {
             checkCurrentEdit();
@@ -205,6 +237,7 @@ public class Config {
          * defines a byte value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public ByteConfigValue define(String name, byte defaultValue) {
             checkCurrentEdit();
@@ -218,6 +251,7 @@ public class Config {
          * defines a float value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public FloatConfigValue define(String name, float defaultValue) {
             checkCurrentEdit();
@@ -231,6 +265,7 @@ public class Config {
          * defines an item value in the current category.
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
+         * @return the created ConfigValue
          */
         public ItemConfigValue defineItem(String name, Item defaultValue) {
             checkCurrentEdit();
@@ -245,6 +280,8 @@ public class Config {
          * @param name the name of the value
          * @param defaultValue the default value that is set on file generation
          * @param converter the function that turns an enum name into the actual enum value. highly recommended to use Enum::valueOf
+         * @param <T> the enum type
+         * @return the created ConfigValue
          */
         public <T extends Enum<T>> EnumConfigValue<T> defineEnum(String name, T defaultValue, Function<String, T> converter) {
             checkCurrentEdit();

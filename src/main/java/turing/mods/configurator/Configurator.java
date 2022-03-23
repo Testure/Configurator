@@ -56,7 +56,7 @@ public class Configurator {
 
     /**
      * registers a config builder
-     * @implNote this is just a shortcut for register(builder::build);
+     * this is just a shortcut for register(builder::build);
      * @param builder the config builder to register
      * @return the built config that was registered
      */
@@ -66,7 +66,7 @@ public class Configurator {
 
     /**
      * registers a supplied config
-     * @implNote common use is register(builder::build);
+     * common use is register(builder::build);
      * @param config the config to register
      * @return the config that was registered
      */

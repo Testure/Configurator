@@ -6,8 +6,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.function.Function;
 
 /**
+ * <p>
  * stores an Enum as a string.
+ * </p><p>
  * you must provide EnumClass::valueOf.
+ * </p>
  * use {@link EnumConfigValue#getReal()} to get the actual Enum.
  */
 @ParametersAreNonnullByDefault

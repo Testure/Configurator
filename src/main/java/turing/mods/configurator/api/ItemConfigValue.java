@@ -9,7 +9,9 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Objects;
 
 /**
+ * <p>
  * stores an item as a string using it's registryName.
+ * </p>
  * use {@link ItemConfigValue#getReal()} to get the actual item.
  */
 @ParametersAreNonnullByDefault

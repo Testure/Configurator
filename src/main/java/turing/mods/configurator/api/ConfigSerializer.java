@@ -19,9 +19,15 @@ import java.nio.file.Paths;
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
 public class ConfigSerializer {
+    /** The top-level config folder */
     public static final File CONFIG_DIR = new File("config");
     protected static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
+    /**
+     * Converts a config into a {@link JsonObject}.
+     * @param config the config to convert
+     * @return the json version of the given config
+     */
     public static JsonObject serialize(Config config) {
         JsonObject json = new JsonObject();
 
@@ -43,6 +49,10 @@ public class ConfigSerializer {
         parent.add(category.name, categoryJSON);
     }
 
+    /**
+     * Writes a config to a .json file.
+     * @param config the config to write
+     */
     public static void writeConfig(Config config) {
         JsonObject json = serialize(config);
         String name = config.name + ".json";
@@ -50,6 +60,10 @@ public class ConfigSerializer {
         writeConfigJson(json, name, new File(folderName));
     }
 
+    /**
+     * Reads the given config's .json file and puts the read values into the config values.
+     * @param config the config to read
+     */
     public static void readConfig(Config config) {
         JsonObject json = readConfigJson(config.name + ".json", new File(getFolder(config)));
         if (json == null) throw new NullPointerException("Could not read config json!");
@@ -76,7 +90,7 @@ public class ConfigSerializer {
     }
 
     /**
-     * reads the raw {@link JsonObject} from a config file
+     * Reads the raw {@link JsonObject} from a config file
      * @param name the name of the config file
      * @param folder the folder the config file is in
      * @return json that was read
@@ -97,11 +111,21 @@ public class ConfigSerializer {
         return null;
     }
 
+    /**
+     * Gets the config file for the given config.
+     * @param config the config to get a file of
+     * @return the config's {@link File}
+     */
     public static File getConfigFile(Config config) {
         Path path = Paths.get(getFolder(config) + "/" + config.name + ".json");
         return path.toFile();
     }
 
+    /**
+     * Gets the folder path for this config to put into.
+     * @param config the config
+     * @return a string of the config's full folder path
+     */
     public static String getFolder(Config config) {
         return config.type.getFolder(CONFIG_DIR.getPath() + (!config.folder.isEmpty() ? "/" + config.folder : ""));
     }
@@ -129,7 +153,7 @@ public class ConfigSerializer {
     }
 
     /**
-     * directly writes a config file using a pre-built {@link JsonObject}
+     * Directly writes a config file using a pre-built {@link JsonObject}
      * @param json the json object to write
      * @param fileName the name of the config file
      * @param folder the name of the folder to create the config file in
