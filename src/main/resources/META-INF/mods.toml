@@ -3,7 +3,7 @@ loaderVersion="[35,)[36,)[37,)[38,)[39,)[40,)"
 license="All rights reserved"
 [[mods]]
 modId="configurator"
-version="1.0.1"
+version="1.2.0"
 displayName="Configurator"
 authors="Turing6"
 logoFile= "Icon.png"

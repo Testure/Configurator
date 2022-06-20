@@ -76,14 +76,23 @@ public class ConfigSerializer {
         if (categoryJSON == null) throw new NullPointerException();
 
         for (ConfigValue<?> value : category.getValues()) {
-            if (value instanceof IntegerConfigValue) ((IntegerConfigValue) value).set(categoryJSON.get(value.name).getAsInt());
-            else if (value instanceof FloatConfigValue) ((FloatConfigValue) value).set(categoryJSON.get(value.name).getAsFloat());
-            else if (value instanceof DoubleConfigValue) ((DoubleConfigValue) value).set(categoryJSON.get(value.name).getAsDouble());
-            else if (value instanceof LongConfigValue) ((LongConfigValue) value).set(categoryJSON.get(value.name).getAsLong());
-            else if (value instanceof ShortConfigValue) ((ShortConfigValue) value).set(categoryJSON.get(value.name).getAsShort());
-            else if (value instanceof ByteConfigValue) ((ByteConfigValue) value).set(categoryJSON.get(value.name).getAsByte());
-            else if (value instanceof BooleanConfigValue) ((BooleanConfigValue) value).set(categoryJSON.get(value.name).getAsBoolean());
-            else ((ConfigValue<String>) value).set(categoryJSON.get(value.name).getAsString());
+            if (categoryJSON.has(value.name)) {
+                if (value instanceof IntegerConfigValue)
+                    ((IntegerConfigValue) value).set(categoryJSON.get(value.name).getAsInt());
+                else if (value instanceof FloatConfigValue)
+                    ((FloatConfigValue) value).set(categoryJSON.get(value.name).getAsFloat());
+                else if (value instanceof DoubleConfigValue)
+                    ((DoubleConfigValue) value).set(categoryJSON.get(value.name).getAsDouble());
+                else if (value instanceof LongConfigValue)
+                    ((LongConfigValue) value).set(categoryJSON.get(value.name).getAsLong());
+                else if (value instanceof ShortConfigValue)
+                    ((ShortConfigValue) value).set(categoryJSON.get(value.name).getAsShort());
+                else if (value instanceof ByteConfigValue)
+                    ((ByteConfigValue) value).set(categoryJSON.get(value.name).getAsByte());
+                else if (value instanceof BooleanConfigValue)
+                    ((BooleanConfigValue) value).set(categoryJSON.get(value.name).getAsBoolean());
+                else ((StringConfigValue) value).set(categoryJSON.get(value.name).getAsString());
+            }
         }
 
         for (ConfigCategory category1 : category.getSubCategories()) readCategory(categoryJSON, category1);
@@ -141,6 +150,57 @@ public class ConfigSerializer {
             writer.write(GSON.toJson(json));
         } catch (IOException e) {
             Configurator.LOGGER.error(e);
+        }
+    }
+
+    private static boolean validateCategory(JsonObject json, ConfigCategory config) {
+        JsonObject categoryJson = json.getAsJsonObject(config.name);
+        if (categoryJson == null) return false;
+
+        for (ConfigValue<?> value : config.values) {
+            if (!categoryJson.has(value.name)) return false;
+        }
+
+        for (ConfigCategory category : config.getSubCategories()) {
+            if (!validateCategory(categoryJson, category)) return false;
+        }
+        return true;
+    }
+
+    public static boolean jsonMatchesConfig(File jsonFile, Config config) {
+        if (jsonFile.exists()) {
+            JsonObject json;
+
+            try (BufferedReader reader = Files.newBufferedReader(jsonFile.toPath())) {
+                json = GSON.fromJson(reader, JsonObject.class);
+            } catch (IOException e) {
+                Configurator.LOGGER.error(e.getMessage());
+                return false;
+            }
+
+            for (ConfigCategory category : config.categories) {
+                if (!validateCategory(json, category)) return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public static void updateConfig(File jsonFile, Config config, boolean alreadyChecked) {
+        if (jsonFile.exists() && (alreadyChecked || !jsonMatchesConfig(jsonFile, config))) {
+            JsonObject json;
+
+            try (BufferedReader reader = Files.newBufferedReader(jsonFile.toPath())) {
+                json = GSON.fromJson(reader, JsonObject.class);
+            } catch (IOException e) {
+                Configurator.LOGGER.error(e.getMessage());
+                return;
+            }
+
+            if (jsonFile.delete()) {
+                for (ConfigCategory category : config.categories) readCategory(json, category);
+                writeConfig(config);
+            } else Configurator.LOGGER.error("Could not overwrite config!!!");
         }
     }
 
