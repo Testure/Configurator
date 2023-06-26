@@ -3,8 +3,6 @@ package turing.mods.configurator;
 import com.blamejared.crafttweaker.api.CraftTweakerAPI;
 import com.blamejared.crafttweaker.api.ScriptLoadingOptions;
 import mcp.MethodsReturnNonnullByDefault;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +20,7 @@ import java.util.function.Supplier;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-@Mod(Configurator.MOD_ID)
+@Mod(value = Configurator.MOD_ID, modid = Configurator.MOD_ID)
 public class Configurator {
     public static final String MOD_ID = "configurator";
     public static final Logger LOGGER = LogManager.getLogger("Configurator");
@@ -42,8 +40,6 @@ public class Configurator {
     }
 
     public Configurator() {
-        MinecraftForge.EVENT_BUS.register(this);
-
         for (Config config : configs) {
             File file = ConfigSerializer.getConfigFile(config);
             if (!file.exists()) ConfigSerializer.writeConfig(config);
@@ -55,14 +51,18 @@ public class Configurator {
 
         File ctFolder = Paths.get(ConfigSerializer.CONFIG_DIR.getPath() + "/" + CT_FOLDER.get()).toFile();
         if (!ctFolder.exists() && !ctFolder.mkdirs()) LOGGER.error(String.format("Could not make folder at %s", ctFolder.getAbsolutePath()));
-
-        if (ModList.get().isLoaded("crafttweaker")) {
-            runCTScripts();
+        try {
+            if (net.minecraftforge.fml.ModList.get().isLoaded("crafttweaker")) {
+                runCTScripts();
+            }
+        } catch (NoClassDefFoundError e) {
+            LOGGER.warn("Failed to load Crafttweaker scripts. This is expected if running on 1.12");
         }
     }
 
     private static void runCTScripts() {
-        CraftTweakerAPI.loadScripts(new ScriptLoadingOptions().setExecute(true).setLoaderName("configurator"));
+        // Disabled for now
+        //CraftTweakerAPI.loadScripts(new ScriptLoadingOptions().setExecute(true).setLoaderName("configurator"));
     }
 
     /**
